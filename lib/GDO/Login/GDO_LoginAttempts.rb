@@ -1,9 +1,9 @@
 #
 # Database table that holds login attempts.
 #
-# @see ::GDO::Core::GDO
-# @see ::GDO::Net::GDT_IP
-# @see ::GDO::User::GDT_User
+# @see GDO::Core::GDO
+# @see GDO::Net::GDT_IP
+# @see GDO::User::GDT_User
 #
 # @version 1.00
 # @since 1.00
@@ -26,10 +26,16 @@ class GDO::Login::GDO_LoginAttempts < GDO::Core::GDO
   ##############
   ### Helper ###
   ##############
+  #
+  # Insert a login attempt.
+  #
+  # @see GDO::Net::GDT_IP
+  #
   def login_failure(user=nil)
-    ip = ::GDO::Net::GDT_IP.current
-    attempt = blank(la_ip: ip, la_user: user)
-    attempt.insert
+    blank(
+      la_ip: ::GDO::Net::GDT_IP.current,
+      la_user: user.get_id,
+    ).insert
   end
   
 end

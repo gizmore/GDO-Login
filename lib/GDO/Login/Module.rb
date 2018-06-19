@@ -19,12 +19,21 @@
 # @license MIT
 #
 class GDO::Login::Module < GDO::Core::GDO_Module
-      
-  is_module __FILE__
+  ##############
+  ### Module ###
+  ##############
+  is_module __FILE__ # Register as GDO module
+  def on_load_language; load_language('lang/login'); end # Load Trans file
   
   ##################
   ### GDO tables ###
   ##################
+  #
+  # Tables to install.
+  #
+  # @see GDO::Login::GDO_LoginHistory
+  # @see GDO::Login::GDO_LoginAttempts
+  #
   def tables
     [
       ::GDO::Login::GDO_LoginHistory,
@@ -35,6 +44,10 @@ class GDO::Login::Module < GDO::Core::GDO_Module
   ##############
   ### Config ###
   ##############
+  #
+  # Module configuration vars
+  # @return [GDT[]]
+  #
   def module_config
     [
       ::GDO::DB::GDT_Boolean.make('login_tos').initial("0"),
@@ -44,9 +57,10 @@ class GDO::Login::Module < GDO::Core::GDO_Module
       ::GDO::DB::GDT_Boolean.make('login_captcha').initial("0"),
     ]
   end
-  
-  def cfg_tries; config_value('login_tries'); end
-  def cfg_timeout; config_value('login_timeout'); end
-  def cfg_captcha; config_value('login_captcha'); end
+  def cfg_tos; config_value('login_tos'); end # @ return [Boolean]
+  def cfg_tos_url; config_var('login_tos_url'); end # @ return [String]
+  def cfg_tries; config_value('login_tries'); end # @ return [Numeric]
+  def cfg_timeout; config_value('login_timeout'); end # @ return [Numeric]
+  def cfg_captcha; config_value('login_captcha'); end # @ return [Boolean]
       
 end

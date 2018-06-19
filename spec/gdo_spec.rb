@@ -4,13 +4,30 @@ require "GDO/Login"
 
 RSpec.describe ::GDO::Login do
   
+#  it "can switch to bot language" do
+#    ::GDO::Lang::Trans.instance.iso(:bot)
+#  end
+  
   it "can connect to the database" do
       db = ::GDO::DB::Connection.new('localhost', 'rubygdo', 'rubygdo', 'rubygdo')
       expect(db.get_link).to be_truthy
   end
   
   it "can install the login module" do
-   ::GDO::Login::Module.instance.install
+    mod = ::GDO::Login::Module.instance
+   ::GDO::Core::ModuleInstaller.instance.drop_module mod
+   ::GDO::Core::ModuleInstaller.instance.install_module mod
+  end
+  
+  it "can configure the login module" do
+    mod = ::GDO::Login::Module.instance
+    mod.save_config_var(:login_captcha, '0') # no captcha for tests :/
+    mod.save_config_var(:login_tries, '4') 
+    mod.save_config_var(:login_timeout, '5')
+    mod.save_config_var(:login_tos, '0')
+    mod.save_config_var(:login_tos, '0')
+    
+    expect(mod.cfg_tries).to eq(4)
   end
   
   it "does display a login form" do
@@ -35,6 +52,52 @@ RSpec.describe ::GDO::Login do
     method.set_parameters(login: 'gizmore', password: '11111111', submit: "1") # setup parameters
     response = method.execute_method # run it
     expect(response._code).to eq(200)
+    expect(::GDO::User::GDO_User.current.display_name).to eq("gizmore")
+  end
+  
+  it "can logout" do
+    expect(::GDO::User::GDO_User.current.display_name).to eq("gizmore")
+    method = ::GDO::Login::Method::Logout.instance
+    method.set_parameters(submit: "1")
+    response = method.execute_method # run it
+    expect(response._code).to eq(200)
+    expect(::GDO::User::GDO_User.current).to equal(::GDO::User::GDO_User.ghost)
+  end
+  
+  it "can exceed login attempts" do
+    
+    # Excpect a ghost user
+    expect(::GDO::User::GDO_User.current).to equal(::GDO::User::GDO_User.ghost)
+
+    # Load module and config to test
+    mod = gdo_module('Login')
+    tries = mod.cfg_tries
+    timeout = mod.cfg_timeout
+    expect(tries).to eq(4)
+
+    # Craft login call
+    method = gdo_module('Login').gdo_method('Form') # get method
+    method.set_parameters({
+      login: 'gizmore',
+      password: 'WRONG',
+      submit: "1"
+    })
+    
+    # Now exceed logins
+    # 1 try is left from failure test. so it sums to 4!
+    expect(method.execute_method._exception).to be_a(::GDO::Login::LoginException)
+    expect(method.execute_method._exception).to be_a(::GDO::Login::LoginException)
+    expect(method.execute_method._exception).to be_a(::GDO::Login::LoginException)
+    
+    # The last is logins are exceeded
+    method.set_parameters({
+      login: 'gizmore',
+      password: '11111111', # Even correct pass!
+      submit: "1"
+    })
+    expect(method.execute_method._exception).to be_a(::GDO::Login::LoginsExceededException)
+    expect(method.execute_method._exception).to be_a(::GDO::Login::LoginsExceededException)
+    
   end
 
   
