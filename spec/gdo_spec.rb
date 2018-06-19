@@ -23,7 +23,7 @@ RSpec.describe ::GDO::Login do
     mod = ::GDO::Login::Module.instance
     mod.save_config_var(:login_captcha, '0') # no captcha for tests :/
     mod.save_config_var(:login_tries, '4') 
-    mod.save_config_var(:login_timeout, '5')
+    mod.save_config_var(:login_timeout, '3')
     mod.save_config_var(:login_tos, '0')
     mod.save_config_var(:login_tos, '0')
     
@@ -89,15 +89,19 @@ RSpec.describe ::GDO::Login do
     expect(method.execute_method._exception).to be_a(::GDO::Login::LoginException)
     expect(method.execute_method._exception).to be_a(::GDO::Login::LoginException)
     
-    # The last is logins are exceeded
+    # The next logins are exceeded...
     method.set_parameters({
       login: 'gizmore',
-      password: '11111111', # Even correct pass!
+      password: '11111111', # ... even with correct pass!
       submit: "1"
     })
     expect(method.execute_method._exception).to be_a(::GDO::Login::LoginsExceededException)
     expect(method.execute_method._exception).to be_a(::GDO::Login::LoginsExceededException)
-    
+    expect(::GDO::User::GDO_User.current).to equal(::GDO::User::GDO_User.ghost) # still ghost
+    sleep(3) # wait....
+    # Now it works again!
+    expect(method.execute_method._code).to eq(200)
+    expect(::GDO::User::GDO_User.current.display_name).to eq("gizmore")
   end
 
   
