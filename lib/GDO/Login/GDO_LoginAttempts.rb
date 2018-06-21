@@ -17,9 +17,9 @@ class GDO::Login::GDO_LoginAttempts < GDO::Core::GDO
   ###########
   def fields
     [
-      ::GDO::Net::GDT_IP.make(:la_ip).not_null,
-      ::GDO::User::GDT_User.make(:la_user),
-      ::GDO::Date::GDT_CreatedAt.make(:la_created)
+      ::GDO::Net::GDT_IP.new(:la_ip).not_null,
+      ::GDO::User::GDT_User.new(:la_user),
+      ::GDO::Date::GDT_CreatedAt.new(:la_created)
     ]
   end
   

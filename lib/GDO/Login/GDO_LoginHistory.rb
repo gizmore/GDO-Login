@@ -14,9 +14,9 @@ class GDO::Login::GDO_LoginHistory < GDO::Core::GDO
   
   def fields
     [
-      ::GDO::Net::GDT_IP.make(:lh_ip).not_null,
-      ::GDO::User::GDT_User.make(:lh_user).not_null,
-      ::GDO::Date::GDT_CreatedAt.make(:lh_created)
+      ::GDO::Net::GDT_IP.new(:lh_ip).not_null,
+      ::GDO::User::GDT_User.new(:lh_user).not_null,
+      ::GDO::Date::GDT_CreatedAt.new(:lh_created)
     ]
   end
   

@@ -14,10 +14,10 @@ class GDO::Login::Method::Form < ::GDO::Method::Form
   # @see GDO::Method::Form
   #
   def form(form)
-    form.add_field ::GDO::DB::GDT_String.make('login').not_null # login is either email or username
-    form.add_field ::GDO::Form::GDT_Password.make('password').not_null
-    form.add_field ::GDO::Form::GDT_Submit.make
-    form.add_field ::GDO::Form::GDT_CSRF.make
+    form.add_field ::GDO::DB::GDT_String.new('login').not_null # login is either email or username
+    form.add_field ::GDO::Form::GDT_Password.new('password').not_null
+    form.add_field ::GDO::Form::GDT_Submit.new
+    form.add_field ::GDO::Form::GDT_CSRF.new
   end
   
   #
@@ -43,7 +43,7 @@ class GDO::Login::Method::Form < ::GDO::Method::Form
     ::GDO::User::GDO_User.current = user
     publish(:gdo_user_authenticated, user)
     ::GDO::Method::GDT_Response.make_with(
-      ::GDO::UI::GDT_Success.make.text(t(:msg_authenticated))
+      ::GDO::UI::GDT_Success.new.text(t(:msg_authenticated))
     )
   end
   

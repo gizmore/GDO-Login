@@ -18,8 +18,8 @@ class ::GDO::Login::Method::Logout < ::GDO::Method::Form
     # Decorate form
     #
     def form(form)
-      form.add_field ::GDO::Form::GDT_Submit.make
-      form.add_field ::GDO::Form::GDT_CSRF.make
+      form.add_field ::GDO::Form::GDT_Submit.new
+      form.add_field ::GDO::Form::GDT_CSRF.new
       self
     end
     
@@ -34,7 +34,7 @@ class ::GDO::Login::Method::Logout < ::GDO::Method::Form
       publish(:gdo_user_signed_out, user)
       # Build response
       response_with(
-        ::GDO::UI::GDT_Success.make.text(t(:msg_signed_out)),
+        ::GDO::UI::GDT_Success.new.text(t(:msg_signed_out)),
       )
     end
   

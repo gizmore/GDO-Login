@@ -50,11 +50,11 @@ class GDO::Login::Module < GDO::Core::GDO_Module
   #
   def module_config
     [
-      ::GDO::DB::GDT_Boolean.make('login_tos').initial("0"),
-      ::GDO::Net::GDT_Url.make('login_tos_url').reachable.protocols('http','https'),
-      ::GDO::DB::GDT_UInt.make('login_tries').min("0").max("100").initial("5").bytes(2),
-      ::GDO::Date::GDT_Duration.make('login_timeout').min("0").initial("300"),
-      ::GDO::DB::GDT_Boolean.make('login_captcha').initial("0"),
+      ::GDO::DB::GDT_Boolean.new('login_tos').initial("0"),
+      ::GDO::Net::GDT_Url.new('login_tos_url').reachable.protocols('http','https'),
+      ::GDO::DB::GDT_UInt.new('login_tries').min("0").max("100").initial("5").bytes(2),
+      ::GDO::Date::GDT_Duration.new('login_timeout').min("0").initial("300"),
+      ::GDO::DB::GDT_Boolean.new('login_captcha').initial("0"),
     ]
   end
   def cfg_tos; config_value('login_tos'); end # @ return [Boolean]
