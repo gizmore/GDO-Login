@@ -48,6 +48,7 @@ RSpec.describe ::GDO::Login do
   end
 
   it "can succeed at logins" do
+    ::GDO::Core::Application.new_request
     method = gdo_module('Login').gdo_method('Form') # get method
     method.set_parameters(login: 'gizmore', password: '11111111', submit: "1") # setup parameters
     response = method.execute_method # run it
@@ -56,8 +57,9 @@ RSpec.describe ::GDO::Login do
   end
   
   it "can logout" do
+    ::GDO::Core::Application.new_request
     expect(::GDO::User::GDO_User.current.display_name).to eq("gizmore")
-    method = ::GDO::Login::Method::Logout.instance
+    method = ::GDO::Login::Method::Logout.new
     method.set_parameters(submit: "1")
     response = method.execute_method # run it
     expect(response._code).to eq(200)
@@ -85,8 +87,11 @@ RSpec.describe ::GDO::Login do
     
     # Now exceed logins
     # 1 try is left from failure test. so it sums to 4!
+    ::GDO::Core::Application.new_request
     expect(method.execute_method._exception).to be_a(::GDO::Login::LoginException)
+    ::GDO::Core::Application.new_request
     expect(method.execute_method._exception).to be_a(::GDO::Login::LoginException)
+    ::GDO::Core::Application.new_request
     expect(method.execute_method._exception).to be_a(::GDO::Login::LoginException)
     
     # The next logins are exceeded...
@@ -95,11 +100,15 @@ RSpec.describe ::GDO::Login do
       password: '11111111', # ... even with correct pass!
       submit: "1"
     })
+    ::GDO::Core::Application.new_request
     expect(method.execute_method._exception).to be_a(::GDO::Login::LoginsExceededException)
+    ::GDO::Core::Application.new_request
     expect(method.execute_method._exception).to be_a(::GDO::Login::LoginsExceededException)
+    ::GDO::Core::Application.new_request
     expect(::GDO::User::GDO_User.current).to equal(::GDO::User::GDO_User.ghost) # still ghost
     sleep(3) # wait....
     # Now it works again!
+    ::GDO::Core::Application.new_request
     expect(method.execute_method._code).to eq(200)
     expect(::GDO::User::GDO_User.current.display_name).to eq("gizmore")
   end

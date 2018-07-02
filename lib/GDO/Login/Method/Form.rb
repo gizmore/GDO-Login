@@ -14,7 +14,7 @@ class GDO::Login::Method::Form < ::GDO::Method::Form
   # @see GDO::Method::Form
   #
   def form(form)
-    form.add_field ::GDO::DB::GDT_String.new('login').not_null # login is either email or username
+    form.add_field ::GDO::DB::GDT_String.new('login').label(t(:login)).not_null # login is either email or username
     form.add_field ::GDO::Form::GDT_Password.new('password').not_null
     form.add_field ::GDO::Form::GDT_Submit.new
     form.add_field ::GDO::Form::GDT_CSRF.new

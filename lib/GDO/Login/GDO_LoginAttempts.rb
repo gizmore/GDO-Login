@@ -34,7 +34,7 @@ class GDO::Login::GDO_LoginAttempts < GDO::Core::GDO
   def login_failure(user=nil)
     blank(
       la_ip: ::GDO::Net::GDT_IP.current,
-      la_user: user.get_id,
+      la_user: user == nil ? nil : user.get_id,
     ).insert
   end
   

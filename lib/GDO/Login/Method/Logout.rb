@@ -1,6 +1,5 @@
 #
 # GDO Logout method.
-# 
 #
 # @event :gdo_user_signed_out
 #
@@ -20,7 +19,6 @@ class ::GDO::Login::Method::Logout < ::GDO::Method::Form
     def form(form)
       form.add_field ::GDO::Form::GDT_Submit.new
       form.add_field ::GDO::Form::GDT_CSRF.new
-      self
     end
     
     #
@@ -33,9 +31,7 @@ class ::GDO::Login::Method::Logout < ::GDO::Method::Form
       # Call event
       publish(:gdo_user_signed_out, user)
       # Build response
-      response_with(
-        ::GDO::UI::GDT_Success.new.text(t(:msg_signed_out)),
-      )
+      success(t(:msg_signed_out))
     end
   
 end
