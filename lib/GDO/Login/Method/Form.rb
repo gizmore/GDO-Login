@@ -24,7 +24,7 @@ class GDO::Login::Method::Form < ::GDO::Method::Form
   # Submit button handling
   # @see GDO::Method::Form
   #
-  def execute_submit
+  def execute_submit(form)
     # Bruteforce protection!
     ban_check
     # Parameters

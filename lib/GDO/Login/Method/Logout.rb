@@ -24,7 +24,7 @@ class ::GDO::Login::Method::Logout < ::GDO::Method::Form
     #
     # Logs the user out
     #
-    def execute_submit
+    def execute_submit(form)
       # Logout
       user = ::GDO::User::GDO_User.current
       ::GDO::User::GDO_User.current = nil
