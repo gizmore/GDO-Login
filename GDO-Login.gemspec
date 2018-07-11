@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "GDO-Login"
-  spec.version       = "1.0.0"
+  spec.version       = "1.00"
   spec.authors       = ["gizmore"]
   spec.email         = ["gizmore@wechall.net"]
 
@@ -24,6 +24,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "byebug", "~> 10.0"
 
-  spec.add_dependency "gdo", "~> 1.0"
+  spec.add_dependency "GDO", "~> 1"
 
 end
