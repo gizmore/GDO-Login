@@ -1,6 +1,7 @@
 #
 # Login Form.
 # Basic password authentification.
+# login is either email or username
 #
 # @version 1.00
 # @since 1.00
@@ -14,7 +15,7 @@ class GDO::Login::Method::Form < ::GDO::Method::Form
   # @see GDO::Method::Form
   #
   def form(form)
-    form.add_field ::GDO::DB::GDT_String.new('login').label(t(:login)).not_null # login is either email or username
+    form.add_field ::GDO::DB::GDT_String.new('login').label(t(:login)).not_null 
     form.add_field ::GDO::Form::GDT_Password.new('password').not_null
     form.add_field ::GDO::Form::GDT_Submit.new
     form.add_field ::GDO::Form::GDT_CSRF.new
@@ -39,12 +40,13 @@ class GDO::Login::Method::Form < ::GDO::Method::Form
     return login_success(user)
   end
   
+  #
+  # 
+  #
   def login_success(user)
-    ::GDO::User::GDO_User.current = user
-    publish(:gdo_user_authenticated, user)
-    ::GDO::Method::GDT_Response.make_with(
-      ::GDO::UI::GDT_Success.new.text(t(:msg_authenticated))
-    )
+    ::GDO::User::GDO_User.current = user # login
+    publish(:gdo_user_authenticated, user) # event
+    success(t(:msg_authenticated)) # response
   end
   
   #################
